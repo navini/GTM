@@ -1,0 +1,124 @@
+import json
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy.io as sci
+
+def summarize(datalist):
+    for i,element in enumerate(datalist):
+        keys = element.keys()
+        print '\nData set', i
+        keys.remove('eeg')
+        for key in keys:
+            print '  {}: {}'.format(key,element[key])
+        eegtrials = element['eeg']
+        shape = np.array(eegtrials['trial 1']).shape
+        print ('  eeg: {:d} trials, each a matrix with {:d} rows' +
+              ' and approximately {:d} columns').format( \
+            len(eegtrials), shape[0], shape[1])
+
+
+
+data = json.load(open('s11-gammasys-home-impaired.json','r'))
+summarize(data)
+
+letterb = data[5]
+
+print letterb['protocol']
+
+
+eeg = np.array(letterb['eeg']['trial 1']).T
+
+print eeg.shape
+
+plt.ion()
+
+plt.figure();
+
+plt.plot(eeg[1000:5000,:9] + 80*np.arange(8,-1,-1));
+
+plt.plot(np.zeros((1000,9)) + 80*np.arange(8,-1,-1),'--',color='gray');
+
+plt.yticks([]);
+
+plt.legend(letterb['channels'] + ['Stimulus']);
+
+plt.axis('tight');
+
+print np.unique(eeg[:,8])
+print [chr(int(n)) for n in np.abs(np.unique(eeg[:,8]))]
+
+
+# Plot stimulus and P3
+plt.clf();
+
+plt.plot(eeg[3000:4500,[5,8]]);  #  Stimulus and P3
+
+plt.axis('tight');
+
+plt.xlabel('Time Samples');
+
+
+#Collect all of the segments from the letter-b trial
+starts = np.where(np.diff(np.abs(eeg[:,-1])) > 0)[0]
+stimuli = [chr(int(n)) for n in np.abs(eeg[starts+1,-1])]
+targetLetter = letterb['protocol'][-1]
+targetSegments = np.array(stimuli) == targetLetter
+
+print len(starts),len(stimuli),len(targetSegments)
+
+
+for i,(s,stim,targ) in enumerate(zip(starts,stimuli,targetSegments)):
+   print s,stim,targ,'; ',
+   if (i+1) % 5 == 0:
+       print
+
+print "window lengths ",np.diff(starts)
+print "minimum length ",np.min(np.diff(starts))
+
+indices = np.array([ np.arange(s,s+210) for s in starts ])
+print "indices shape ",indices.shape
+
+segments = eeg[indices,:8]
+print "sigment shape ",segments.shape
+
+targetSegs = segments[targetSegments,:,5]
+Twithclass = np.hstack((np.ones((targetSegs.shape[0], 1), dtype=targetSegs.dtype),targetSegs))
+nontargetSegs = segments[targetSegments==False,:,5]
+NTwithclass = np.hstack((np.zeros((nontargetSegs.shape[0], 1), dtype=nontargetSegs.dtype),nontargetSegs))
+print "P4, target segment shape", targetSegs.shape
+print "P4, nontarget segment shape", nontargetSegs.shape
+classData=np.vstack((Twithclass,NTwithclass))
+
+P4data = segments[:,:,4]
+print P4data
+
+print "P4, segment shape", P4data.shape
+
+#np.savetxt('classData.txt', classData)
+
+print Twithclass
+print nontargetSegs
+print NTwithclass
+
+print "Full data", classData.shape
+print classData
+
+
+indices = np.array([ np.arange(s,s+210) for s in starts ])
+print "indices shape ",indices.shape
+segments = eeg[indices,:8]
+print "sigment shape ",segments.shape
+
+targetSegs4 = segments[targetSegments,:,5]
+Twithclass4 = np.hstack((np.ones((targetSegs4.shape[0], 1), dtype=targetSegs4.dtype),targetSegs4))
+nontargetSegs4 = segments[targetSegments==False,:,5]
+NTwithclass4 = np.hstack((np.zeros((nontargetSegs4.shape[0], 1), dtype=nontargetSegs4.dtype),nontargetSegs4))
+classData4=np.vstack((Twithclass4,NTwithclass4))
+print classData4.shape
+
+P4data4 = segments[:,:,5]
+print P4data
+
+#np.savetxt('classData4.txt', classData4)
+
+
