@@ -1,0 +1,16 @@
+../../GTMClassification.py:281: ComplexWarning: Casting complex values to real discards the imaginary part
+  targetPoints[targetcount,0]=means[i,0]
+../../GTMClassification.py:282: ComplexWarning: Casting complex values to real discards the imaginary part
+  targetPoints[targetcount,1]=means[i,1]
+../../GTMClassification.py:275: ComplexWarning: Casting complex values to real discards the imaginary part
+  nontargetPoints[nontargetcount,0]=means[i,0]
+../../GTMClassification.py:276: ComplexWarning: Casting complex values to real discards the imaginary part
+  nontargetPoints[nontargetcount,1]=means[i,1]
+/s/chopin/a/grad/navinid/Dropbox/Research/gtm/python_GTM/GTMClassification/neuralnetworks.py:295: RuntimeWarning: overflow encountered in exp
+  expY = np.exp(Y)
+/s/chopin/a/grad/navinid/Dropbox/Research/gtm/python_GTM/GTMClassification/neuralnetworks.py:297: RuntimeWarning: invalid value encountered in divide
+  Y = np.hstack((expY / denom, 1/denom))
+/s/chopin/a/grad/navinid/Dropbox/Research/gtm/python_GTM/GTMClassification/neuralnetworks.py:298: RuntimeWarning: divide by zero encountered in log
+  return -np.mean(T * np.log(Y))
+/s/chopin/a/grad/navinid/Dropbox/Research/gtm/python_GTM/GTMClassification/neuralnetworks.py:298: RuntimeWarning: invalid value encountered in multiply
+  return -np.mean(T * np.log(Y))

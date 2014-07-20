@@ -1,8 +1,8 @@
-%matplotlib inline
+from __future__ import division
 from matplotlib import pyplot as plt
 import numpy as np
-from __future__ import division
 import neuralnetworks as nn
+import sys
 
 def normalize(signal):
     means = np.mean(signal, axis=1).reshape((signal.shape[0],1))
@@ -10,11 +10,11 @@ def normalize(signal):
     signal = np.divide(np.subtract(signal,means),std)
     return signal
 
-data=np.loadtxt('plots/S24/Data/S24LDP3-smoothed.txt')
-BSR = np.zeros((10,1))
+data=np.loadtxt(sys.argv[1])
+BSR = np.zeros((20,1))
 
 for j in range(10):
-    for k in range(10):
+    for k in range(20):
         data_features = data[:,1:211]
         data_classes = data[:,0:1]
 

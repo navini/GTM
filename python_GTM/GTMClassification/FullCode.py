@@ -1,4 +1,3 @@
-%matplotlib inline
 import numpy as np
 from scipy import linalg
 from scipy import sparse
